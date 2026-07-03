@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+outputs/
+
+# 생성된 합성 데이터 (config 성격의 facets_en.json 은 추적 유지)
+data/scenarios_pool.json
+data/scenarios_en.json

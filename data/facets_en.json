@@ -1,0 +1,54 @@
+{
+  "trait": "extraversion",
+  "note": "cues 를 배열로 재구조화(파싱 모호성 제거). positive_emotions low 약화형 cue 2개 active 수정: 'rarely shows strong delight'->'responds with calm composure', 'expresses little outward excitement'->'keeps a flat, neutral expression'. excitement_seeking low 반응형 cue 수정(neuroticism 드리프트): 'finds loud or intense environments overwhelming'->'steers clear of loud or intense settings'. 원본은 facets_en.orig.json.",
+  "facets": [
+    {
+      "facet": "warmth",
+      "definition": "The tendency to be affectionate, friendly, and emotionally close to others. Warm people form attachments easily, show genuine care, and express liking openly.",
+      "cues": {
+        "high": ["greets others warmly", "shows affection openly", "takes genuine interest in people", "forms close bonds easily"],
+        "low": ["stays formal and reserved with people", "keeps emotional distance", "is polite but detached", "slow to form close bonds"]
+      }
+    },
+    {
+      "facet": "gregariousness",
+      "definition": "The preference for the company of others and for social gatherings. Gregarious people seek out crowds and group activity and feel energized by being around many people.",
+      "cues": {
+        "high": ["seeks out crowds and parties", "enjoys big groups", "looks for company", "feels energized in social settings"],
+        "low": ["prefers solitude or one-on-one", "avoids crowds", "feels drained by large groups", "seeks quiet alone-time"]
+      }
+    },
+    {
+      "facet": "assertiveness",
+      "definition": "The tendency to be dominant, forceful, and socially ascendant. Assertive people speak up, take charge, voice opinions directly, and naturally take leadership rather than staying in the background.",
+      "cues": {
+        "high": ["speaks up first", "takes charge", "leads decisions", "voices opinions directly", "comfortable directing others"],
+        "low": ["stays quiet", "lets others lead", "follows decisions", "holds back opinions", "prefers the background"]
+      }
+    },
+    {
+      "facet": "activity",
+      "definition": "The tendency toward a fast pace, high energy, and keeping busy. Active people lead vigorous lives, do things quickly and energetically, and prefer a full schedule.",
+      "cues": {
+        "high": ["keeps a fast pace", "packs the day with activity", "stays on the move", "does things quickly and energetically"],
+        "low": ["keeps a slow, relaxed pace", "leaves ample downtime", "moves through the day calmly", "prefers a light schedule"]
+      }
+    },
+    {
+      "facet": "excitement_seeking",
+      "definition": "The craving for stimulation, thrills, and excitement. Excitement-seekers enjoy bright environments, risk, and bold novel experiences, and are drawn to high-stimulation settings.",
+      "cues": {
+        "high": ["chases thrills", "seeks bold or risky experiences", "enjoys loud or bright stimulating settings", "drawn to novelty"],
+        "low": ["avoids thrills and risk", "prefers calm familiar settings", "steers clear of loud or intense settings", "sticks to the safe"]
+      }
+    },
+    {
+      "facet": "positive_emotions",
+      "definition": "The tendency to experience positive emotions such as joy, cheerfulness, and enthusiasm. People high in this facet laugh easily, feel happy readily, and express delight openly.",
+      "cues": {
+        "high": ["laughs easily", "feels cheerful often", "gets enthusiastic", "expresses joy and delight openly"],
+        "low": ["stays even-keeled and reserved", "responds with calm composure", "takes things calmly", "keeps a flat, neutral expression"]
+      }
+    }
+  ]
+}
