@@ -1,0 +1,14 @@
+# 모듈 3+ 스티어링 (Gemma 2 2B 활성화 추출·CAA·SAE) — 클라우드 GPU 전용.
+# 모듈 1~2(OpenAI/Anthropic API)는 requirements.txt 로 충분. 이 파일은 GPU 런타임에만 설치.
+#   pip install -r requirements-steering.txt
+torch>=2.3
+transformers>=4.42        # Gemma 2 지원 최초 릴리스
+accelerate>=0.30
+huggingface_hub>=0.23     # 게이트 모델 다운로드 (HF_TOKEN)
+safetensors>=0.4
+sentencepiece>=0.2        # Gemma 토크나이저
+numpy>=1.26
+tqdm>=4.66
+# 스텝 5 SAE(Gemma Scope) 로더 — 선택(raw npz 경로면 불필요)
+# sae-lens>=3.0
+bitsandbytes>=0.43  # STEER_4BIT=1 (큰 모델 T4 적재)

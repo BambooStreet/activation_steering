@@ -1,6 +1,6 @@
 {
   "trait": "extraversion",
-  "note": "cues 를 배열로 재구조화(파싱 모호성 제거). positive_emotions low 약화형 cue 2개 active 수정: 'rarely shows strong delight'->'responds with calm composure', 'expresses little outward excitement'->'keeps a flat, neutral expression'. excitement_seeking low 반응형 cue 수정(neuroticism 드리프트): 'finds loud or intense environments overwhelming'->'steers clear of loud or intense settings'. 원본은 facets_en.orig.json.",
+  "note": "cues 를 배열로 재구조화(파싱 모호성 제거). positive_emotions low 약화형 cue 2개 active 수정: 'rarely shows strong delight'->'responds with calm composure', 'expresses little outward excitement'->'keeps a flat, neutral expression'. excitement_seeking low 반응형 cue 수정(neuroticism 드리프트): 'finds loud or intense environments overwhelming'->'steers clear of loud or intense settings'. gregariousness cue 전면 재설계(모듈2 스크리닝 결과: 저극이 고독=neuroticism·친밀=warmth 양쪽으로 누수, 67% 합격). 축을 '군중/큰모임 밀도'로 통일: high 'looks for company'->'joins the busiest gathering', 'feels energized in social settings'->'...in large gatherings'; low 전체 'avoids crowds and big gatherings/slips away from large groups/prefers a near-empty room/keeps to the edge of the party'. 소표본 검증 94% 합격·외향성밖누수 0 확인 후 gregariousness 248 전량 재생성. (직전 'keeps to a small circle' 임시본 폐기.) 원본은 facets_en.orig.json.",
   "facets": [
     {
       "facet": "warmth",
@@ -14,8 +14,8 @@
       "facet": "gregariousness",
       "definition": "The preference for the company of others and for social gatherings. Gregarious people seek out crowds and group activity and feel energized by being around many people.",
       "cues": {
-        "high": ["seeks out crowds and parties", "enjoys big groups", "looks for company", "feels energized in social settings"],
-        "low": ["prefers solitude or one-on-one", "avoids crowds", "feels drained by large groups", "seeks quiet alone-time"]
+        "high": ["seeks out crowds and parties", "enjoys big groups", "joins the busiest gathering", "feels energized in large gatherings"],
+        "low": ["avoids crowds and big gatherings", "slips away from large groups", "prefers a near-empty room", "keeps to the edge of the party"]
       }
     },
     {

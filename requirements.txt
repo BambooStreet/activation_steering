@@ -1,2 +1,4 @@
 openai>=2.0
 python-dotenv>=1.0
+numpy>=1.26
+anthropic>=0.69

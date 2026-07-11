@@ -57,11 +57,11 @@ facet당 250개의 서로 다른 시나리오가 필요 → LLM이 (facet×도�
 ```bash
 cp .env.example .env          # OPENAI_API_KEY 입력. GEN_MODEL=gpt-5.4
 . .venv/bin/activate
-# 0단계(전 facet 시나리오 풀)
-python generate_scenarios.py --facets all --target 62
+# 0단계(전 facet 시나리오 풀)  ※ 스크립트는 module1/ 로 이동됨(루트에서 실행)
+python module1/generate_scenarios.py --facets all --target 62
 # 1단계 동기
-python generate_pairs.py --facets all
+python module1/generate_pairs.py --facets all
 # 1단계 Batch(저렴): 예 — 특정 facet
-python batch_pairs.py --facets excitement_seeking --model gpt-5.4 --out outputs/pairs_x.jsonl
+python module1/batch_pairs.py --facets excitement_seeking --model gpt-5.4 --out outputs/pairs_x.jsonl
 ```
 단계적 확장 권장: 소배치(--limit / --domains) → 검토 → 전체.

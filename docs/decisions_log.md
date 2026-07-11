@@ -15,11 +15,30 @@
 대형 런 중 `insufficient_quota`(429)로 0단계 중단 → 사용자 크레딧 충전 후 재개. 이후
 `chat_json`에 쿼터 감지/재시도 추가. 교훈: 대량 런 전 1콜 프로브로 쿼터 확인.
 
+## 저장소 정리 (2026-07-08, 모듈 3/4 스티어링 준비)
+모듈 1(생성)과 모듈 3/4(스티어링)가 루트에 섞여 있어 분리:
+- `module1/` ← `generate_scenarios/pairs/batch_pairs/screen_pairs/revalidate_pool.py` + `README_module1.md`
+  (각 스크립트에 path shim 2줄 추가 → 루트 `common.py` import 유지. 형제 import는 동일 폴더라 그대로).
+- `notebooks/` ← Colab `.ipynb` ×2.
+- **삭제**(재생성 가능·gitignore): `colab_bundle*.zip`, 루트 `diagnostics.json`, `outputs/pairs_raw.bak_*.jsonl` ×3.
+- **불변 제약**: `common.py`는 루트 고정(import anchor), `gemma_common.py`는 `steering/`(루트 한 칸 아래) 고정
+  (`ROOT=__file__.parent.parent`로 루트를 잡아 `common` 재사용). 이 둘은 이동 불가.
+- 검증: 구문 컴파일 + module1 5개 `--help` + `gemma_common` import 전부 통과.
+- 새 실험(v_selfreport·이중해리·logit-lens)은 전부 `steering/`에 적재.
+
+## Phase 0 판정 & Phase 1 설계 확정 (2026-07-09)
+- **Phase 0 결과**(`phase0_reachability.json`, 9B·layer 20·α=0): 자기보고 digit 채널은 프롬프트 persona 유도로
+  **완전히 열림**(`dE_ft≈4.0`, gen "5"/"1"), 벡터 주입으론 안 열림(`dE≈0.017`). ⇒ 채널은 살아있고 v_behavior가
+  digit 지배 방향과 **어긋나 있을 뿐**. 추출 재료 추천 = **persona**(grounded는 N누수 `dN 1.77`, fewshot 내부 발자국 최소).
+- **Phase 1 설계 확정** → [phase1_selfreport.md](steering/phase1_selfreport.md). persona high/low를 **답 위치**에서
+  뽑아 `v_selfreport` 제작(avg_both 단일 벡터, asc+desc 평균으로 digit-token 성분 상쇄) → v_behavior와의
+  **이중해리 2×2**로 서로 다른 방향임을 검증. 이번엔 **설계문서만**, 코드·콜랩은 다음 구현 턴.
+
 ## 미해결 / 사용자 결정 대기
 - [ ] **실험 산출물 정리 여부**: `outputs/pairs_es_mini.jsonl`, `pairs_es_54.jsonl`,
   `pairs_test_pe*.jsonl`, `pairs_raw.bak_5.5ES.jsonl`, `batch_input.jsonl` — 기록 보존 vs 삭제.
 - [ ] **5 facet도 5.4 통일 재생성 여부**: 현재 혼합(ES 5.4 / 나머지 5.5). 검증된 5.5 유지가 기본 권장.
-- [ ] **gpt-5.4 실단가**: 확정 시 비용표(model_and_cost.md) 정확화.
+- [ ] **gpt-5.4 실단가**: 확정 시 비용표(module1/model_and_cost.md) 정확화.
 
 ## 모듈 2 인계 (검증)
 논문 3중 검증의 파일럿 버전:

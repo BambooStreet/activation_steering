@@ -39,6 +39,8 @@ from pathlib import Path
 
 from openai import OpenAI
 
+import sys as _sys, pathlib as _pathlib
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent.parent))  # module1/ → 루트(common.py)
 import common as C
 
 POOL_PATH = C.DATA_DIR / "scenarios_pool.json"

@@ -7,3 +7,11 @@ outputs/
 # 생성된 합성 데이터 (config 성격의 facets_en.json 은 추적 유지)
 data/scenarios_pool.json
 data/scenarios_en.json
+
+# 모듈 3+ 활성화 캐시 (대용량). 소용량 벡터(artifacts/vectors/)는 추적 유지.
+artifacts/activations/
+artifacts/**/*.npy
+!artifacts/vectors/
+colab_bundle.zip
+colab_bundle_4b.zip
+phase0_bundle.zip

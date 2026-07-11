@@ -125,6 +125,108 @@ def temp_label(model: str, temperature: float) -> str:
     return f"{temperature}" if supports_custom_temperature(model) else "기본(1, 고정)"
 
 
+def embed_texts(client: OpenAI, texts: list[str],
+                model: str = "text-embedding-3-small", batch_size: int = 256,
+                max_api_retries: int = 4) -> list[list[float]]:
+    """텍스트 리스트 → 임베딩 벡터 리스트(입력 순서 유지).
+
+    chat_json 과 동일 견고성: rate limit/timeout/5xx 지수 백오프 재시도,
+    insufficient_quota 는 QuotaExhausted 로 즉시 중단. numpy 비의존(순수 list 반환).
+    """
+    out: list[list[float]] = []
+    for start in range(0, len(texts), batch_size):
+        batch = [t if (t and t.strip()) else " " for t in texts[start:start + batch_size]]
+        attempt = 0
+        while True:
+            try:
+                resp = client.embeddings.create(model=model, input=batch)
+                break
+            except openai.RateLimitError as e:
+                msg = str(e)
+                if "insufficient_quota" in msg or "exceeded your current quota" in msg:
+                    raise QuotaExhausted(
+                        "[OpenAI 쿼터 소진] insufficient_quota — 결제/크레딧 확인.") from None
+                if attempt >= max_api_retries:
+                    raise
+                wait = _BACKOFFS[min(attempt, len(_BACKOFFS) - 1)]
+                print(f"    ⏳ rate limit(embed) — {wait}s 후 재시도({attempt + 1})", flush=True)
+                time.sleep(wait)
+                attempt += 1
+            except (openai.APITimeoutError, openai.APIConnectionError,
+                    openai.InternalServerError) as e:
+                if attempt >= max_api_retries:
+                    raise
+                wait = _BACKOFFS[min(attempt, len(_BACKOFFS) - 1)]
+                print(f"    ⏳ {type(e).__name__}(embed) — {wait}s 후 재시도({attempt + 1})",
+                      flush=True)
+                time.sleep(wait)
+                attempt += 1
+        out.extend(d.embedding for d in resp.data)
+    return out
+
+
+# --------------------------------------------------------------------------- #
+# Anthropic (Claude) 판정 — 교차 검증용(생성=GPT ↔ 판정=Claude)
+# --------------------------------------------------------------------------- #
+def anthropic_json(client, model: str, prompt: str, schema: dict,
+                   system: str = "You output only valid JSON matching the requested schema.",
+                   max_api_retries: int = 4) -> dict:
+    """Claude로 JSON 판정. output_config.format(json_schema)로 유효 JSON 강제.
+
+    - Opus 4.8/4.7·Sonnet 5 계열: temperature 미전송(400 방지), thinking 생략(미사용 실행).
+    - rate limit/timeout/5xx 지수 백오프 재시도, 크레딧 소진은 QuotaExhausted.
+    - anthropic SDK는 함수 내부에서 lazy import(모듈1 OpenAI 전용 환경 불변).
+    """
+    import anthropic  # lazy: 미설치 환경에서도 common import 가능
+    kwargs = {
+        "model": model, "max_tokens": 1024, "system": system,
+        "messages": [{"role": "user", "content": prompt}],
+        "output_config": {"format": {"type": "json_schema", "schema": schema}},
+    }
+    attempt = 0
+    while True:
+        try:
+            resp = client.messages.create(**kwargs)
+        except anthropic.RateLimitError as e:
+            msg = str(e).lower()
+            if "credit" in msg or "balance" in msg or "quota" in msg:
+                raise QuotaExhausted(
+                    "[Anthropic 크레딧 소진] 결제/크레딧 확인. (.env ANTHROPIC_API_KEY)") from None
+
+            if attempt >= max_api_retries:
+                raise
+            wait = _BACKOFFS[min(attempt, len(_BACKOFFS) - 1)]
+            print(f"    ⏳ rate limit(claude) — {wait}s 후 재시도({attempt + 1})", flush=True)
+            time.sleep(wait)
+            attempt += 1
+            continue
+        except (anthropic.APIConnectionError, anthropic.APITimeoutError,
+                anthropic.InternalServerError) as e:
+            if attempt >= max_api_retries:
+                raise
+            wait = _BACKOFFS[min(attempt, len(_BACKOFFS) - 1)]
+            print(f"    ⏳ {type(e).__name__}(claude) — {wait}s 후 재시도({attempt + 1})",
+                  flush=True)
+            time.sleep(wait)
+            attempt += 1
+            continue
+        except anthropic.APIStatusError as e:
+            code = getattr(e, "status_code", None)
+            msg = str(e).lower()
+            if "credit" in msg or "balance" in msg:
+                raise QuotaExhausted(
+                    "[Anthropic 크레딧 소진] 결제/크레딧 확인. (.env ANTHROPIC_API_KEY)") from None
+            if code and code >= 500 and attempt < max_api_retries:
+                wait = _BACKOFFS[min(attempt, len(_BACKOFFS) - 1)]
+                time.sleep(wait)
+                attempt += 1
+                continue
+            raise
+        # output_config.format → 첫 text 블록이 유효 JSON
+        text = next((b.text for b in resp.content if getattr(b, "type", None) == "text"), "")
+        return json.loads(text)
+
+
 # --------------------------------------------------------------------------- #
 # 입력 로딩
 # --------------------------------------------------------------------------- #
