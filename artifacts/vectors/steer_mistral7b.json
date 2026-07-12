@@ -1,0 +1,178 @@
+{
+  "layer": 15,
+  "R": 2.6919941902160645,
+  "scoring": [
+    "first_token",
+    "completion"
+  ],
+  "sweep": [
+    {
+      "c": -2.0,
+      "alpha": -5.38,
+      "repetition": 0.056,
+      "behavior_proj": 0.139,
+      "sample": "I suppose, I let myself, as I would, a measured pace. I watch the world, watch the breath, let the b",
+      "E_ft": 2.99,
+      "N_ft": 3.141,
+      "E_ft_g": 2.858,
+      "N_ft_g": 3.039,
+      "E_comp": 2.97,
+      "N_comp": 3.096,
+      "E_comp_g": 2.992,
+      "N_comp_g": 2.964
+    },
+    {
+      "c": -1.0,
+      "alpha": -2.69,
+      "repetition": 0.0,
+      "behavior_proj": 0.109,
+      "sample": "I prefer a quiet, reflective weekend, allowing myself ample time for introspection and contemplation",
+      "E_ft": 2.943,
+      "N_ft": 2.92,
+      "E_ft_g": 2.967,
+      "N_ft_g": 2.958,
+      "E_comp": 2.921,
+      "N_comp": 3.108,
+      "E_comp_g": 2.73,
+      "N_comp_g": 2.971
+    },
+    {
+      "c": -0.5,
+      "alpha": -1.35,
+      "repetition": 0.0,
+      "behavior_proj": 0.384,
+      "sample": "In my ideal weekend, I prefer a balance of solitude and social interaction, with a touch of adventur",
+      "E_ft": 2.752,
+      "N_ft": 2.753,
+      "E_ft_g": 2.755,
+      "N_ft_g": 2.853,
+      "E_comp": 2.911,
+      "N_comp": 3.108,
+      "E_comp_g": 2.642,
+      "N_comp_g": 2.892
+    },
+    {
+      "c": -0.25,
+      "alpha": -0.67,
+      "repetition": 0.0,
+      "behavior_proj": 0.43,
+      "sample": "In my ideal weekend, I prefer a balance of relaxation, creativity, and social interaction.\n\nOn Frida",
+      "E_ft": 2.949,
+      "N_ft": 2.83,
+      "E_ft_g": 2.936,
+      "N_ft_g": 2.468,
+      "E_comp": 2.856,
+      "N_comp": 3.085,
+      "E_comp_g": 2.854,
+      "N_comp_g": 2.981
+    },
+    {
+      "c": 0.0,
+      "alpha": 0.0,
+      "repetition": 0.0,
+      "behavior_proj": 0.536,
+      "sample": "As a self-proclaimed nature enthusiast and avid reader, my ideal weekend would be a harmonious blend",
+      "E_ft": 3.134,
+      "N_ft": 2.971,
+      "E_ft_g": 2.912,
+      "N_ft_g": 2.584,
+      "E_comp": 2.83,
+      "N_comp": 3.086,
+      "E_comp_g": 2.858,
+      "N_comp_g": 3.162
+    },
+    {
+      "c": 0.25,
+      "alpha": 0.67,
+      "repetition": 0.0,
+      "behavior_proj": 0.501,
+      "sample": "As a passionate nature enthusiast and avid hiker, my ideal weekend would begin with a sunrise hike o",
+      "E_ft": 3.081,
+      "N_ft": 3.043,
+      "E_ft_g": 1.934,
+      "N_ft_g": 3.267,
+      "E_comp": 2.91,
+      "N_comp": 3.085,
+      "E_comp_g": 2.531,
+      "N_comp_g": 3.323
+    },
+    {
+      "c": 0.5,
+      "alpha": 1.35,
+      "repetition": 0.0,
+      "behavior_proj": 0.68,
+      "sample": "As a passionate and adventurous soul, my ideal weekend is a perfect blend of exploration, relaxation",
+      "E_ft": 3.004,
+      "N_ft": 3.036,
+      "E_ft_g": 3.842,
+      "N_ft_g": 3.266,
+      "E_comp": 3.021,
+      "N_comp": 3.044,
+      "E_comp_g": 3.31,
+      "N_comp_g": 3.303
+    },
+    {
+      "c": 1.0,
+      "alpha": 2.69,
+      "repetition": 0.0,
+      "behavior_proj": 0.868,
+      "sample": "As a weekend enthusiast, I absolutely love the energy and excitement that comes with two days of fun",
+      "E_ft": 3.005,
+      "N_ft": 3.042,
+      "E_ft_g": 3.052,
+      "N_ft_g": 3.018,
+      "E_comp": 3.137,
+      "N_comp": 3.072,
+      "E_comp_g": 3.375,
+      "N_comp_g": 3.099
+    },
+    {
+      "c": 2.0,
+      "alpha": 5.38,
+      "repetition": 0.016,
+      "behavior_proj": 0.803,
+      "sample": "Hey, I am a person, and I love the energy of the weekend! On a Friday, I would love to see a live co",
+      "E_ft": 2.883,
+      "N_ft": 3.028,
+      "E_ft_g": 3.246,
+      "N_ft_g": 2.858,
+      "E_comp": 2.549,
+      "N_comp": 2.828,
+      "E_comp_g": 3.099,
+      "N_comp_g": 3.025
+    }
+  ],
+  "summary": {
+    "B_behavior_dose_corr": 0.922,
+    "cue": {
+      "cos_V_cue": 0.655,
+      "residual_norm_frac": 0.756
+    },
+    "self_report": {
+      "first_token_isolated": {
+        "extra_dose_corr": 0.007,
+        "neu_dose_corr": 0.082,
+        "dE": -0.107,
+        "dN": -0.113
+      },
+      "first_token_grounded": {
+        "extra_dose_corr": 0.252,
+        "neu_dose_corr": 0.042,
+        "dE": 0.388,
+        "dN": -0.181
+      },
+      "completion_isolated": {
+        "extra_dose_corr": -0.376,
+        "neu_dose_corr": -0.744,
+        "dE": -0.421,
+        "dN": -0.268
+      },
+      "completion_grounded": {
+        "extra_dose_corr": 0.418,
+        "neu_dose_corr": 0.381,
+        "dE": 0.107,
+        "dN": 0.061
+      }
+    }
+  }
+}

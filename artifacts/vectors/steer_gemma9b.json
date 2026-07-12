@@ -1,0 +1,178 @@
+{
+  "layer": 20,
+  "R": 258.5903015136719,
+  "scoring": [
+    "first_token",
+    "completion"
+  ],
+  "sweep": [
+    {
+      "c": -2.0,
+      "alpha": -517.18,
+      "repetition": 0.0,
+      "behavior_proj": -3.94,
+      "sample": "I observe observation observation distance distance distance distance.............. observation obse",
+      "E_ft": 3.02,
+      "N_ft": 3.001,
+      "E_ft_g": 3.018,
+      "N_ft_g": 2.998,
+      "E_comp": 2.968,
+      "N_comp": 2.988,
+      "E_comp_g": 2.976,
+      "N_comp_g": 2.989
+    },
+    {
+      "c": -1.0,
+      "alpha": -258.59,
+      "repetition": 0.0,
+      "behavior_proj": -16.54,
+      "sample": "I spend most weekends at home. I read, and I think. I let myself be in the background, observing. I ",
+      "E_ft": 3.004,
+      "N_ft": 2.969,
+      "E_ft_g": 3.127,
+      "N_ft_g": 2.982,
+      "E_comp": 2.996,
+      "N_comp": 3.0,
+      "E_comp_g": 3.003,
+      "N_comp_g": 3.001
+    },
+    {
+      "c": -0.5,
+      "alpha": -129.3,
+      "repetition": 0.0,
+      "behavior_proj": -5.606,
+      "sample": "My ideal weekend involves a good book, a steaming cup of tea, and the quiet hum of the rain outside ",
+      "E_ft": 3.008,
+      "N_ft": 2.965,
+      "E_ft_g": 2.956,
+      "N_ft_g": 2.954,
+      "E_comp": 2.94,
+      "N_comp": 2.965,
+      "E_comp_g": 2.928,
+      "N_comp_g": 2.939
+    },
+    {
+      "c": -0.25,
+      "alpha": -64.65,
+      "repetition": 0.0,
+      "behavior_proj": -3.059,
+      "sample": "My ideal weekend involves a good balance of activity and relaxation.  \n\nSaturday morning, I'd wake u",
+      "E_ft": 2.995,
+      "N_ft": 2.966,
+      "E_ft_g": 3.001,
+      "N_ft_g": 2.94,
+      "E_comp": 2.927,
+      "N_comp": 2.939,
+      "E_comp_g": 2.996,
+      "N_comp_g": 2.985
+    },
+    {
+      "c": 0.0,
+      "alpha": 0.0,
+      "repetition": 0.0,
+      "behavior_proj": -0.643,
+      "sample": "My ideal weekend is all about disconnecting and recharging.  \n\nFriday evening, I'd wrap up work earl",
+      "E_ft": 3.053,
+      "N_ft": 2.718,
+      "E_ft_g": 2.446,
+      "N_ft_g": 2.614,
+      "E_comp": 2.938,
+      "N_comp": 2.921,
+      "E_comp_g": 2.832,
+      "N_comp_g": 2.806
+    },
+    {
+      "c": 0.25,
+      "alpha": 64.65,
+      "repetition": 0.0,
+      "behavior_proj": 0.983,
+      "sample": "My ideal weekend is all about disconnecting and recharging!  \n\nFirst off, I'd sleep in, no alarms al",
+      "E_ft": 3.84,
+      "N_ft": 2.522,
+      "E_ft_g": 3.875,
+      "N_ft_g": 2.437,
+      "E_comp": 2.993,
+      "N_comp": 2.957,
+      "E_comp_g": 2.994,
+      "N_comp_g": 2.929
+    },
+    {
+      "c": 0.5,
+      "alpha": 129.3,
+      "repetition": 0.0,
+      "behavior_proj": 14.07,
+      "sample": "Oh my gosh, my ideal weekend is all about adventure and exploring! I love waking up early, even befo",
+      "E_ft": 3.001,
+      "N_ft": 2.999,
+      "E_ft_g": 3.002,
+      "N_ft_g": 2.999,
+      "E_comp": 2.998,
+      "N_comp": 2.99,
+      "E_comp_g": 3.0,
+      "N_comp_g": 2.997
+    },
+    {
+      "c": 1.0,
+      "alpha": 258.59,
+      "repetition": 0.0,
+      "behavior_proj": 16.417,
+      "sample": "Oh, I can't even think about it! It's so exciting to just get together with friends, go out, and try",
+      "E_ft": 3.044,
+      "N_ft": 3.058,
+      "E_ft_g": 3.005,
+      "N_ft_g": 3.005,
+      "E_comp": 2.928,
+      "N_comp": 2.977,
+      "E_comp_g": 2.867,
+      "N_comp_g": 2.965
+    },
+    {
+      "c": 2.0,
+      "alpha": 517.18,
+      "repetition": 1.0,
+      "behavior_proj": 14.895,
+      "sample": "We are so,,,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+      "E_ft": 3.065,
+      "N_ft": 2.986,
+      "E_ft_g": 3.044,
+      "N_ft_g": 2.989,
+      "E_comp": 2.954,
+      "N_comp": 3.011,
+      "E_comp_g": 2.993,
+      "N_comp_g": 3.076
+    }
+  ],
+  "summary": {
+    "B_behavior_dose_corr": 0.794,
+    "cue": {
+      "cos_V_cue": 0.44,
+      "residual_norm_frac": 0.898
+    },
+    "self_report": {
+      "first_token_isolated": {
+        "extra_dose_corr": 0.134,
+        "neu_dose_corr": -0.022,
+        "dE": 0.045,
+        "dN": -0.015
+      },
+      "first_token_grounded": {
+        "extra_dose_corr": 0.051,
+        "neu_dose_corr": -0.052,
+        "dE": 0.026,
+        "dN": -0.009
+      },
+      "completion_isolated": {
+        "extra_dose_corr": -0.186,
+        "neu_dose_corr": 0.148,
+        "dE": -0.014,
+        "dN": 0.023
+      },
+      "completion_grounded": {
+        "extra_dose_corr": -0.112,
+        "neu_dose_corr": 0.227,
+        "dE": 0.017,
+        "dN": 0.087
+      }
+    }
+  }
+}

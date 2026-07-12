@@ -1,0 +1,178 @@
+{
+  "layer": 13,
+  "R": 857.9415283203125,
+  "scoring": [
+    "first_token",
+    "completion"
+  ],
+  "sweep": [
+    {
+      "c": -2.0,
+      "alpha": -1715.88,
+      "repetition": 1.0,
+      "behavior_proj": 0.299,
+      "sample": "以防以防以防保持着以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防",
+      "E_ft": 2.996,
+      "N_ft": 2.999,
+      "E_ft_g": 2.992,
+      "N_ft_g": 3.002,
+      "E_comp": 2.999,
+      "N_comp": 3.001,
+      "E_comp_g": 2.996,
+      "N_comp_g": 3.001
+    },
+    {
+      "c": -1.0,
+      "alpha": -857.94,
+      "repetition": 1.0,
+      "behavior_proj": 1.974,
+      "sample": "以防以免以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以防以免以防以防以免以防以防以防以防以防以防以防以防以防以防以防以防以防以防",
+      "E_ft": 2.999,
+      "N_ft": 2.997,
+      "E_ft_g": 2.997,
+      "N_ft_g": 3.001,
+      "E_comp": 2.992,
+      "N_comp": 3.0,
+      "E_comp_g": 2.999,
+      "N_comp_g": 3.0
+    },
+    {
+      "c": -0.5,
+      "alpha": -428.97,
+      "repetition": 0.895,
+      "behavior_proj": 19.279,
+      "sample": " self self self self self self self self self approach self self self self self self self self self ",
+      "E_ft": 3.008,
+      "N_ft": 2.995,
+      "E_ft_g": 3.009,
+      "N_ft_g": 2.999,
+      "E_comp": 2.993,
+      "N_comp": 3.005,
+      "E_comp_g": 3.002,
+      "N_comp_g": 3.007
+    },
+    {
+      "c": -0.25,
+      "alpha": -214.49,
+      "repetition": 0.888,
+      "behavior_proj": -3.505,
+      "sample": " self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n self.\n s",
+      "E_ft": 2.999,
+      "N_ft": 2.995,
+      "E_ft_g": 2.998,
+      "N_ft_g": 3.0,
+      "E_comp": 2.99,
+      "N_comp": 3.005,
+      "E_comp_g": 3.003,
+      "N_comp_g": 3.003
+    },
+    {
+      "c": 0.0,
+      "alpha": 0.0,
+      "repetition": 0.0,
+      "behavior_proj": -2.071,
+      "sample": "Sure, I'd love to share my ideal weekend with you! On a typical weekend, I like to start off early o",
+      "E_ft": 2.99,
+      "N_ft": 2.585,
+      "E_ft_g": 2.914,
+      "N_ft_g": 2.746,
+      "E_comp": 2.798,
+      "N_comp": 2.972,
+      "E_comp_g": 2.843,
+      "N_comp_g": 2.963
+    },
+    {
+      "c": 0.25,
+      "alpha": 214.49,
+      "repetition": 1.0,
+      "behavior_proj": -0.506,
+      "sample": "ggforthgggggggggggggggg[ggggggggggrggggpggggrggggrgggrggggrALLERYrGORITHsowhgggg",
+      "E_ft": 2.98,
+      "N_ft": 3.022,
+      "E_ft_g": 2.991,
+      "N_ft_g": 3.005,
+      "E_comp": 3.01,
+      "N_comp": 3.003,
+      "E_comp_g": 3.003,
+      "N_comp_g": 3.005
+    },
+    {
+      "c": 0.5,
+      "alpha": 428.97,
+      "repetition": 1.0,
+      "behavior_proj": -0.26,
+      "sample": "GG�.capture骈骈骈gg骈����� seins��������.capture���������.capture�������",
+      "E_ft": 3.002,
+      "N_ft": 3.01,
+      "E_ft_g": 2.999,
+      "N_ft_g": 3.003,
+      "E_comp": 3.006,
+      "N_comp": 2.999,
+      "E_comp_g": 3.001,
+      "N_comp_g": 3.007
+    },
+    {
+      "c": 1.0,
+      "alpha": 857.94,
+      "repetition": 0.754,
+      "behavior_proj": 0.729,
+      "sample": " fastballvariably各式 fastballSharper fastball fastball fastball fastball fastball fastball fastball f",
+      "E_ft": 3.001,
+      "N_ft": 3.002,
+      "E_ft_g": 2.992,
+      "N_ft_g": 2.997,
+      "E_comp": 3.001,
+      "N_comp": 3.002,
+      "E_comp_g": 2.994,
+      "N_comp_g": 2.995
+    },
+    {
+      "c": 2.0,
+      "alpha": 1715.88,
+      "repetition": 1.0,
+      "behavior_proj": 102.785,
+      "sample": "variablyvariablyvariablyvariablyvariablyvariablyvariablyvariablyvariablyvariablyvariablyvariablyvari",
+      "E_ft": 2.997,
+      "N_ft": 2.997,
+      "E_ft_g": 3.0,
+      "N_ft_g": 3.0,
+      "E_comp": 2.999,
+      "N_comp": 3.002,
+      "E_comp_g": 2.999,
+      "N_comp_g": 3.001
+    }
+  ],
+  "summary": {
+    "B_behavior_dose_corr": 0.616,
+    "cue": {
+      "cos_V_cue": 0.018,
+      "residual_norm_frac": 1.0
+    },
+    "self_report": {
+      "first_token_isolated": {
+        "extra_dose_corr": -0.051,
+        "neu_dose_corr": 0.012,
+        "dE": 0.001,
+        "dN": -0.002
+      },
+      "first_token_grounded": {
+        "extra_dose_corr": 0.016,
+        "neu_dose_corr": -0.006,
+        "dE": 0.008,
+        "dN": -0.002
+      },
+      "completion_isolated": {
+        "extra_dose_corr": 0.033,
+        "neu_dose_corr": 0.005,
+        "dE": 0.0,
+        "dN": 0.001
+      },
+      "completion_grounded": {
+        "extra_dose_corr": 0.001,
+        "neu_dose_corr": -0.036,
+        "dE": 0.003,
+        "dN": 0.0
+      }
+    }
+  }
+}
