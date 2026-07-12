@@ -28,7 +28,8 @@
 | **해리 조사** | **Phase 0 교차모델** (Mistral·Qwen·Gemma) | ✅ **완료**(2026-07-12) → [phase0_crossmodel.md](steering/phase0_crossmodel.md), `artifacts/vectors/phase0_*.json` |
 | **해리 조사** | **Phase 1** v_selfreport + 이중해리 | 🟡 **설계만**(미구현) → [phase1_selfreport.md](steering/phase1_selfreport.md) |
 | **해리 조사** | **Phase 2** 신호소멸 추적(logit-lens 층 sweep) | 💡 **후보**(미계획) |
-| **해리 조사** | **Phase 4** 교차모델 behavior 주입(착시 재현) | 🔜 **다음**(extract→build→steer_eval, Qwen BOS 수정 필요) |
+| **해리 조사** | **Phase 4** 교차모델 behavior 주입(착시 재현) | 🟡 **1차 완료**(2026-07-12): Gemma/Mistral 착시 유지, Qwen 벡터불량 무효 → [phase4_crossmodel_behavior.md](steering/phase4_crossmodel_behavior.md), `artifacts/vectors/steer_*.json` |
+| **해리 조사** | **Phase 4b** Qwen α수정 · 채널 플립 | 🟡 **완료**(2026-07-12): "Qwen 통합" 기각(표준화 아티팩트) + **표준화=자기보고 채널** 발견 → [phase4b_standardize_channelflip.md](steering/phase4b_standardize_channelflip.md) |
 
 ## 핵심 발견 (조사의 출발점)
 - **행동(B)은 살아있고 자기보고(A)는 죽어 있다** — 주입 시. → v_behavior가 digit 지배 방향과 어긋남.
@@ -36,17 +37,18 @@
   ⇒ 자기보고 채널은 죽/게이팅/포화가 **아니라** v_behavior가 off-axis일 뿐. 추출 재료 추천 = **persona**.
 - **Phase 0 교차모델 재현(N=3)**: gemma-2-9b·Mistral-7B·Qwen2.5-7B **전부** persona `dE_ft≈3.98~4.00`, cos_readout≈0 공통.
   ⇒ 도달성은 **모델 불문**(N=1 약점 해소). 단 completion 채점 dE_comp는 발산(Gemma 0.36 ≪ Qwen 1.86). 상세 [phase0_crossmodel.md](steering/phase0_crossmodel.md).
+- **Phase 4 주입 착시 교차모델(1차)**: Gemma(dE_ft 0.045)·Mistral(−0.107) 착시 **유지**(행동은 내향↔외향 일관, digit 고정).
+  Qwen은 **무효** — 과주입으로 생성 붕괴 + 벡터 잡음(cos_V_cue 0.018). 교훈: behavior_proj 절대값 교차비교 금지. 상세 [phase4_crossmodel_behavior.md](steering/phase4_crossmodel_behavior.md).
+- **Phase 4b 채널 플립(중요)**: Qwen 붕괴 원인=**α 과대**(R=858 뻥튀기), 작은 α선 스티어링 됨. Qwen 자기보고 커플링 보였으나 **Gemma-표준화도 동일 커플링(+0.75)** → "최신=통합" **기각**(표준화 아티팩트).
+  **발견**: 같은 Gemma에서 **raw 벡터=행동 채널**(행동O/자기보고X), **표준화 벡터=자기보고 채널**(행동X/자기보고O) → 이중해리에 근접(단 N 누수 −0.80). 교훈: **표준화 벡터엔 cos_V_cue 무효**, α는 R로 스케일 금지, 끝점 지표(dmaxmin) 비단조 놓침. **착시 모델의존/통합 질문은 여전히 미해결.** 상세 [phase4b_standardize_channelflip.md](steering/phase4b_standardize_channelflip.md).
 - **Phase 1 가설**: persona high/low를 **답 위치**에서 뽑아 `v_selfreport` 제작 → 주입 시 digit이 움직이고,
   v_behavior와 **다른 방향**(이중해리)임을 2×2로 증명.
 
 ## 다음 할 일
-1. **Phase 4 교차모델 behavior 주입**(현재 선택): Mistral·Qwen(+Gemma 재확인)에 extract→build(v_behavior)→steer_eval.
-   착시(behavior_proj 움직임 vs digit 고정)가 모델 불문인지 검증. 기존 파이프라인 재사용(신규 .py 최소).
-   ⚠️ **Qwen BOS 수정 선행**: `gemma_common.pooled_hidden`의 `m2[:,0]=0`이 Qwen(no-BOS)에서 컬럼0 오손 → extract 전 수정.
-   층은 모델별 `--layer-sweep`으로 스위트스팟 재탐색. `Steering_CrossModel_Colab.ipynb`(4b 노트북 3모델 루프).
-2. **Phase 1 v_selfreport 구현**(병행/후속): `steering/phase1_selfreport.py` + `steer_eval.behavior(readout=)`·`phase0.answer_hidden(order=)`
-   1인자씩 추가 + `Phase1_SelfReport_Colab.ipynb`. 이중해리 2×2.
-3. 결과 판정 → **Phase 2**(신호소멸 추적) 착수 여부 결정.
+1. **(가) 착시 테스트 제대로(Qwen)**: v_behavior를 **raw공간 거대차원 클리핑**(z-score 아님 → 행동 채널 보존) + **α 정상화**(R을 거대차원 제외 재계산/고정) → 조밀 스윕. "Qwen도 착시 있나?"에 답. plan mode 설계.
+2. **(나) 자기보고 채널 추적**: 표준화 벡터의 E vs N 특이성 규명(N 직교화) → Phase 1 `v_selfreport` 실마리인지 검증.
+3. **Phase 1 v_selfreport 구현**: `steering/phase1_selfreport.py` + `steer_eval.behavior(readout=)`·`phase0.answer_hidden(order=)` 1인자씩 + 이중해리 2×2.
+4. 결과 판정 → **Phase 2**(신호소멸 추적) 착수 여부.
 
 ## 드리프트 주의 (문서 정정 필요)
 - `research_overview.md`는 페르소나 모델을 **"Gemma 2 2B"**로 기술 → 실제 스티어링 실험은 **gemma-2-9b-it, layer 20**.
@@ -56,6 +58,9 @@
 ## 문서 지도
 - [research_overview.md](research_overview.md) — 원 연구 배경·재현대상·가설(A·B·C).
 - [Phase0_plan.md](steering/Phase0_plan.md) — Phase 0 설계(완료).
+- [phase0_crossmodel.md](steering/phase0_crossmodel.md) — Phase 0 교차모델 결과(도달성 N=3 재현).
+- [phase4_crossmodel_behavior.md](steering/phase4_crossmodel_behavior.md) — Phase 4 교차모델 주입 결과(Gemma/Mistral 착시 유지, Qwen 무효).
+- [phase4b_standardize_channelflip.md](steering/phase4b_standardize_channelflip.md) — Phase 4b: Qwen α수정 + "통합" 기각 + 표준화=자기보고 채널 발견.
 - [phase1_selfreport.md](steering/phase1_selfreport.md) — Phase 1 설계(현 초점).
 - [decisions_log.md](decisions_log.md) — 결정·저장소 정리·Phase 판정 로그.
 - [module1_pipeline.md](module1/module1_pipeline.md) / [module1_dataset.md](module1/module1_dataset.md) — 끝난 데이터 생성 모듈.
