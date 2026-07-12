@@ -15,3 +15,4 @@ artifacts/**/*.npy
 colab_bundle.zip
 colab_bundle_4b.zip
 phase0_bundle.zip
+steering_crossmodel_bundle.zip

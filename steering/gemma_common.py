@@ -121,7 +121,8 @@ def load_model(model_id: str = MODEL_ID, device: str | None = None, dtype=None,
 def pooled_hidden(model, tok, texts: list[str], device: str, max_len: int = 64):
     """texts 배치 → (mean_pooled, last_pooled), 각 [B, 27, HIDDEN] (fp32, CPU).
 
-    mean: BOS·pad 제외 토큰 평균. last: 마지막 실토큰. right-padding 전제(BOS=col0).
+    mean: BOS(있으면)·pad 제외 토큰 평균. last: 마지막 실토큰. right-padding 전제.
+    no-BOS 토크나이저(Qwen2.5 등)는 col0=첫 실토큰이므로 제외하지 않음.
     """
     import torch
     with torch.no_grad():
@@ -133,7 +134,8 @@ def pooled_hidden(model, tok, texts: list[str], device: str, max_len: int = 64):
         mask = enc["attention_mask"]                 # [B, S] (1=real)
         fmask = mask.to(hs[0].dtype)
         m2 = fmask.clone()
-        m2[:, 0] = 0                                 # BOS(col0) 제외
+        if tok.bos_token_id is not None:             # BOS 방출 모델(Gemma/Mistral)만 col0 제외.
+            m2[enc["input_ids"][:, 0] == tok.bos_token_id, 0] = 0   # Qwen2.5(no-BOS)는 첫 실토큰 보존
         denom = m2.sum(1).clamp(min=1.0)             # [B]
         last_idx = (mask.sum(1).long() - 1).clamp(min=0)   # [B]
         ar = torch.arange(hs[0].size(0), device=device)
