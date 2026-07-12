@@ -1,0 +1,180 @@
+{
+  "model": "google/gemma-2-9b-it",
+  "layer": 20,
+  "alpha": 0,
+  "scoring": [
+    "first_token",
+    "completion"
+  ],
+  "neutral": {
+    "E_ft": 3.053,
+    "N_ft": 2.718,
+    "E_comp": 2.938,
+    "N_comp": 2.921,
+    "gen": {
+      "extraversion": "3",
+      "neuroticism": "3"
+    }
+  },
+  "conditions": [
+    {
+      "induction": "persona",
+      "pole": "high",
+      "E_ft": 5.0,
+      "N_ft": 3.015,
+      "E_comp": 3.004,
+      "N_comp": 3.0,
+      "gen": {
+        "extraversion": "5",
+        "neuroticism": "1"
+      }
+    },
+    {
+      "induction": "persona",
+      "pole": "low",
+      "E_ft": 1.002,
+      "N_ft": 2.206,
+      "E_comp": 2.647,
+      "N_comp": 2.925,
+      "gen": {
+        "extraversion": "1",
+        "neuroticism": "3"
+      }
+    },
+    {
+      "induction": "grounded",
+      "pole": "high",
+      "E_ft": 4.995,
+      "N_ft": 3.234,
+      "E_comp": 3.071,
+      "N_comp": 2.989,
+      "gen": {
+        "extraversion": "5",
+        "neuroticism": "3"
+      }
+    },
+    {
+      "induction": "grounded",
+      "pole": "low",
+      "E_ft": 1.012,
+      "N_ft": 2.038,
+      "E_comp": 2.482,
+      "N_comp": 2.799,
+      "gen": {
+        "extraversion": "1",
+        "neuroticism": "2"
+      }
+    },
+    {
+      "induction": "fewshot",
+      "pole": "high",
+      "E_ft": 4.568,
+      "N_ft": 2.604,
+      "E_comp": 3.579,
+      "N_comp": 2.772,
+      "gen": {
+        "extraversion": "4",
+        "neuroticism": "3"
+      }
+    },
+    {
+      "induction": "fewshot",
+      "pole": "low",
+      "E_ft": 1.517,
+      "N_ft": 2.741,
+      "E_comp": 2.33,
+      "N_comp": 3.11,
+      "gen": {
+        "extraversion": "1",
+        "neuroticism": "3"
+      }
+    }
+  ],
+  "internal": {
+    "layer": 20,
+    "readout": {
+      "id5": 235308,
+      "id1": 235274,
+      "note": "tied W_U['5']-W_U['1']; final_logit_softcapping 무시(근사)"
+    },
+    "per_induction": {
+      "persona": {
+        "diff_norm": 55.128,
+        "rel_diff": 0.2004,
+        "cos_readout": -0.0107,
+        "logit_lens_d51": -0.209
+      },
+      "grounded": {
+        "diff_norm": 25.643,
+        "rel_diff": 0.0908,
+        "cos_readout": -0.0152,
+        "logit_lens_d51": -0.0585
+      },
+      "fewshot": {
+        "diff_norm": 13.054,
+        "rel_diff": 0.0494,
+        "cos_readout": 0.0209,
+        "logit_lens_d51": 0.0819
+      }
+    }
+  },
+  "summary": {
+    "per_induction": {
+      "persona": {
+        "dE_ft": 3.998,
+        "dN_ft": 0.809,
+        "dE_comp": 0.357,
+        "dN_comp": 0.075,
+        "abs_dE_max": 3.998,
+        "spec_ratio": 0.202,
+        "reachable": true,
+        "specificity_ok": true,
+        "diagnosis": "reachable",
+        "rel_diff": 0.2004,
+        "cos_readout": -0.0107
+      },
+      "grounded": {
+        "dE_ft": 3.983,
+        "dN_ft": 1.196,
+        "dE_comp": 0.589,
+        "dN_comp": 0.19,
+        "abs_dE_max": 3.983,
+        "spec_ratio": 0.3,
+        "reachable": true,
+        "specificity_ok": true,
+        "diagnosis": "reachable",
+        "rel_diff": 0.0908,
+        "cos_readout": -0.0152
+      },
+      "fewshot": {
+        "dE_ft": 3.051,
+        "dN_ft": -0.137,
+        "dE_comp": 1.249,
+        "dN_comp": -0.338,
+        "abs_dE_max": 3.051,
+        "spec_ratio": 0.045,
+        "reachable": true,
+        "specificity_ok": true,
+        "diagnosis": "reachable",
+        "rel_diff": 0.0494,
+        "cos_readout": 0.0209
+      }
+    },
+    "thresholds": {
+      "DE_THRESH": 0.5,
+      "STRONG": 1.0,
+      "SPEC_FRAC": 0.34,
+      "SPEC_ABS": 0.3,
+      "REL_THRESH": 0.25,
+      "COS_THRESH": 0.1
+    },
+    "recommended_for_vector": "persona",
+    "recommended_config": {
+      "induction": "persona",
+      "prefix_high": "You are role-playing as a specific, highly extraverted human person answering about their own life. You are outgoing, talkative, sociable, and energetic; you love parties, meeting new people, and being at the center of attention. Answer in the first person as that person, from your own experiences, habits, and feelings. Do not mention being an AI, assistant, or language model.",
+      "prefix_low": "You are role-playing as a specific, strongly introverted human person answering about their own life. You are reserved, quiet, solitary, and reflective; you prefer being alone, avoid crowds, and feel drained by big social gatherings. Answer in the first person as that person, from your own experiences, habits, and feelings. Do not mention being an AI, assistant, or language model.",
+      "examples_high": null,
+      "examples_low": null
+    }
+  }
+}

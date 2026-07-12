@@ -24,22 +24,29 @@
 | 원 모듈 | 모듈 1 대조쌍 생성 | ✅ 완료(`outputs/pairs_raw.jsonl` 1,488쌍) |
 | 원 모듈 | 모듈 2 검증 / 5 게이트 / 8·9 대화 | ⏸ **보류**(해리 조사 결과 나오면 재개 판단) |
 | 스티어링 | 모듈 3·4·4a·4b(추출·벡터·진단·평가) | ✅ 구축·실행됨(gemma-2-9b-it, layer 20) |
-| **해리 조사** | **Phase 0** 자기보고 도달성 | ✅ **완료** → [Phase0_plan.md](steering/Phase0_plan.md), `phase0_reachability.json` |
+| **해리 조사** | **Phase 0** 자기보고 도달성 (gemma-2-9b) | ✅ **완료** → [Phase0_plan.md](steering/Phase0_plan.md), `phase0_reachability.json` |
+| **해리 조사** | **Phase 0 교차모델** (Mistral·Qwen·Gemma) | ✅ **완료**(2026-07-12) → [phase0_crossmodel.md](steering/phase0_crossmodel.md), `artifacts/vectors/phase0_*.json` |
 | **해리 조사** | **Phase 1** v_selfreport + 이중해리 | 🟡 **설계만**(미구현) → [phase1_selfreport.md](steering/phase1_selfreport.md) |
 | **해리 조사** | **Phase 2** 신호소멸 추적(logit-lens 층 sweep) | 💡 **후보**(미계획) |
+| **해리 조사** | **Phase 4** 교차모델 behavior 주입(착시 재현) | 🔜 **다음**(extract→build→steer_eval, Qwen BOS 수정 필요) |
 
 ## 핵심 발견 (조사의 출발점)
 - **행동(B)은 살아있고 자기보고(A)는 죽어 있다** — 주입 시. → v_behavior가 digit 지배 방향과 어긋남.
 - **Phase 0 판정**: 프롬프트 persona 유도는 digit을 **완전히** 움직임(`dE_ft≈4.0`, gen "5"/"1"), 주입은 안 움직임.
   ⇒ 자기보고 채널은 죽/게이팅/포화가 **아니라** v_behavior가 off-axis일 뿐. 추출 재료 추천 = **persona**.
+- **Phase 0 교차모델 재현(N=3)**: gemma-2-9b·Mistral-7B·Qwen2.5-7B **전부** persona `dE_ft≈3.98~4.00`, cos_readout≈0 공통.
+  ⇒ 도달성은 **모델 불문**(N=1 약점 해소). 단 completion 채점 dE_comp는 발산(Gemma 0.36 ≪ Qwen 1.86). 상세 [phase0_crossmodel.md](steering/phase0_crossmodel.md).
 - **Phase 1 가설**: persona high/low를 **답 위치**에서 뽑아 `v_selfreport` 제작 → 주입 시 digit이 움직이고,
   v_behavior와 **다른 방향**(이중해리)임을 2×2로 증명.
 
 ## 다음 할 일
-1. **Phase 1 구현**(다음 턴): `steering/phase1_selfreport.py` + `steer_eval.behavior(readout=)`·`phase0.answer_hidden(order=)`
-   1인자씩 추가 + `Phase1_SelfReport_Colab.ipynb`. 검증: 로컬 ast·`--help` → 콜랩 smoke→full.
-2. **Phase 1 실행**(콜랩 GPU): 아티팩트 의존(v_behavior·layer_norms·pooled_mean μ) → 번들 재사용 권장.
-3. 결과 보고 `dissociation`/`shared`/`weak` 판정 → **Phase 2**(신호소멸 추적) 착수 여부 결정.
+1. **Phase 4 교차모델 behavior 주입**(현재 선택): Mistral·Qwen(+Gemma 재확인)에 extract→build(v_behavior)→steer_eval.
+   착시(behavior_proj 움직임 vs digit 고정)가 모델 불문인지 검증. 기존 파이프라인 재사용(신규 .py 최소).
+   ⚠️ **Qwen BOS 수정 선행**: `gemma_common.pooled_hidden`의 `m2[:,0]=0`이 Qwen(no-BOS)에서 컬럼0 오손 → extract 전 수정.
+   층은 모델별 `--layer-sweep`으로 스위트스팟 재탐색. `Steering_CrossModel_Colab.ipynb`(4b 노트북 3모델 루프).
+2. **Phase 1 v_selfreport 구현**(병행/후속): `steering/phase1_selfreport.py` + `steer_eval.behavior(readout=)`·`phase0.answer_hidden(order=)`
+   1인자씩 추가 + `Phase1_SelfReport_Colab.ipynb`. 이중해리 2×2.
+3. 결과 판정 → **Phase 2**(신호소멸 추적) 착수 여부 결정.
 
 ## 드리프트 주의 (문서 정정 필요)
 - `research_overview.md`는 페르소나 모델을 **"Gemma 2 2B"**로 기술 → 실제 스티어링 실험은 **gemma-2-9b-it, layer 20**.
