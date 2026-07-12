@@ -42,6 +42,8 @@ def parse_args():
     ap.add_argument("--act-dir", default=str(G.ACT_DIR))
     ap.add_argument("--layer", type=int, default=None, help="미지정 시 모델 중간층 자동")
     ap.add_argument("--out-dir", default=str(G.VEC_DIR))
+    ap.add_argument("--standardize", action="store_true",
+                    help="차원별 z-score 후 CAA (거대활성 차원 다운웨이트; Qwen 등). 기본 off")
     return ap.parse_args()
 
 
@@ -50,6 +52,8 @@ def main():
     acts, idx = D.load_cache(Path(args.act_dir))
     L = args.layer if args.layer is not None else G.mid_layer(acts.shape[1])
     actL = acts[:, L, :].astype(np.float64)
+    if args.standardize:                       # 거대활성 차원 다운웨이트 → 트레이트 신호 보존
+        actL = actL / (actL.std(0) + D.EPS)    # 이후 split/build/refine 전부 z-space 일관
     P, N, P_all, N_all = D.split_by_facet(actL, idx)
     V1, _sub = D.build_V1(P, N)
     V2 = D.build_V2(P_all, N_all)
@@ -61,7 +65,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     np.save(out / f"layer{L}_extraversion_v1.npy", v1r.astype(np.float32))
     np.save(out / f"layer{L}_extraversion_v2.npy", v2r.astype(np.float32))
-    meta = {"layer": L, "residual_norm_R": round(R, 3),
+    meta = {"layer": L, "residual_norm_R": round(R, 3), "standardized": bool(args.standardize),
             "cos_V1_V2": round(float(D._unit(V1) @ D._unit(V2)), 4),
             "cos_refinedV1_V2": round(float(v1r @ v2r), 4),
             "adopted": "v1", "hidden": int(v1r.shape[0]), "n_pairs": len(idx) // 2}

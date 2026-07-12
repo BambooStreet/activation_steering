@@ -153,8 +153,20 @@ def split_by_facet(actL: np.ndarray, idx: list) -> tuple[dict, dict, np.ndarray,
     return P, N, P_all, N_all
 
 
-def analyze_layer(acts: np.ndarray, idx: list, L: int) -> dict:
+def dim_dominance(actL: np.ndarray) -> dict:
+    """차원별 에너지 집중도 — 거대활성(massive activation) 지표. 높을수록 소수 차원이 지배."""
+    e = (actL ** 2).mean(0)                          # [H] per-dim mean energy
+    k = max(1, int(np.ceil(0.01 * actL.shape[1])))   # 상위 1% 차원 수
+    tot = e.sum() + EPS
+    return {"top1": round(float(e.max() / tot), 4),
+            "top1pct": round(float(np.sort(e)[-k:].sum() / tot), 4)}
+
+
+def analyze_layer(acts: np.ndarray, idx: list, L: int, standardize: bool = False) -> dict:
     actL = acts[:, L, :].astype(np.float64)
+    dom = dim_dominance(actL)                         # 표준화 전 원본 기준(거대활성 진단)
+    if standardize:                                  # 차원별 z-score (거대활성 다운웨이트)
+        actL = actL / (actL.std(0) + EPS)
     P, N, P_all, N_all = split_by_facet(actL, idx)
     V1, sub = build_V1(P, N)
     V2 = build_V2(P_all, N_all)
@@ -167,7 +179,9 @@ def analyze_layer(acts: np.ndarray, idx: list, L: int) -> dict:
     contrib = facet_contributions(P, N, V2)
     return {
         "layer": L,
+        "standardized": standardize,
         "cos_V1_V2": round(float(_unit(V1) @ _unit(V2)), 4),
+        "max_dim_frac": dom,
         "facet_norm": norms,
         "facet_norm_ratio": round(max(nm) / (min(nm) + EPS), 3),
         "facet_contrib_to_V2": {k: round(v, 3) for k, v in contrib.items()},
@@ -197,9 +211,13 @@ def self_test():
     cs = sum(r["facet_contrib_to_V2"].values())
     print("self-test cos(V1,V2)=", r["cos_V1_V2"],
           "| contrib 합=", round(cs, 3), "(≈1 기대)",
-          "| PC1_shared=", r["svd"]["pc1_frac_shared"], "(공통 trait → ↑ 기대)")
+          "| PC1_shared=", r["svd"]["pc1_frac_shared"], "(공통 trait → ↑ 기대)",
+          "| top1%=", r["max_dim_frac"]["top1pct"])
     assert abs(cs - 1.0) < 1e-3, "기여도 합 != 1"
     assert r["cos_V1_V2"] > 0.9, "공통 trait 인데 V1/V2 불일치"
+    rs = analyze_layer(acts, idx, 0, standardize=True)   # 표준화 경로도 로직 무결
+    print("  standardize cos(V1,V2)=", rs["cos_V1_V2"], "(공통 trait → 여전히 ↑ 기대)")
+    assert rs["cos_V1_V2"] > 0.9, "표준화 경로에서 V1/V2 불일치"
     print("SELF-TEST OK")
 
 
@@ -208,6 +226,8 @@ def parse_args():
     ap.add_argument("--act-dir", default=str(G.ACT_DIR))
     ap.add_argument("--layers", default=None, help="쉼표구분 레이어 또는 미지정 시 SWEEP")
     ap.add_argument("--out", default=str(G.VEC_DIR / "diagnostics.json"))
+    ap.add_argument("--standardize", action="store_true",
+                    help="차원별 z-score 후 CAA 진단(거대활성 다운웨이트; build_vectors --standardize 미리보기)")
     ap.add_argument("--self-test", action="store_true")
     return ap.parse_args()
 
@@ -221,13 +241,13 @@ def main():
     # 레이어는 캐시 배열 모양에서 모델-적응형으로 (2B=27→[5,9,12,15,19], 9B=43→중간 밴드)
     layers = ([int(x) for x in args.layers.split(",")] if args.layers
               else G.sweep_band(acts.shape[1]))
-    report = {"n_pairs": len(idx) // 2, "layers": {}}
+    report = {"n_pairs": len(idx) // 2, "standardized": args.standardize, "layers": {}}
     for L in layers:
-        r = analyze_layer(acts, idx, L)
+        r = analyze_layer(acts, idx, L, standardize=args.standardize)
         report["layers"][str(L)] = r
         print(f"[layer {L:>2}] cos(V1,V2)={r['cos_V1_V2']:.3f} "
+              f"거대활성(top1={r['max_dim_frac']['top1']:.3f},top1%={r['max_dim_frac']['top1pct']:.3f}) "
               f"norm비={r['facet_norm_ratio']:.2f} "
-              f"최대기여={r['max_contrib_facet']}({r['facet_contrib_to_V2'][r['max_contrib_facet']]:.2f}) "
               f"PC1_shared={r['svd']['pc1_frac_shared']:.2f}")
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
